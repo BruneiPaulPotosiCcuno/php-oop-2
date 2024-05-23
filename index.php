@@ -1,27 +1,20 @@
 <?php
-
-
 require_once __DIR__ . '/Models/Product.php';
 require_once __DIR__ . '/Models/Food.php';
 require_once __DIR__ . '/Models/Game.php';
 require_once __DIR__ . '/Models/Kennel.php';
 require_once __DIR__ . '/Models/Category.php';
+https://source.unsplash.com/random/200x300?dog
 
-$dogs = new Category('Cani', 'https://picsum.photos/200/300');
-$cats = new Category('Felini', 'https://picsum.photos/200/300');
+$dogs = new Category('Cani', 'https://source.unsplash.com/random/200x300?dog');
+$cats = new Category('Gatti', 'https://placekitten.com/200/300');
 
-$collare = new Product('Collare in pelle', 19.99, $dogs);
-
-
-$crocchette = new Food('Crocchette Premium', 24.50, $dogs, ['pollo', 'riso']);
-$crocchette->description = 'Le crocchette più nutrienti e deliziose';
-
-
-$pallina = new Game('Pallina Interattiva', 9.99, $cats);
-
-
-$luxuryImperialKennel = new Kennel('Cuccia Regale', 899.00, $cats);
-$luxuryImperialKennel->size = 8;
+$collare = new Product('Collare', 9.99, $dogs);
+$crocchette = new Food('Crocchette', 12.00, $dogs, ['carne', 'carote']);
+$crocchette->description = 'Le crocchette più buone del mondo';
+$pallina = new Game('Pallina', 4.99, $cats);
+$luxuryImperialKennel = new Kennel('Cuccia Luxury Imperial', 1100.00, $cats);
+$luxuryImperialKennel->size = 5;
 
 $products = [
     $collare,
@@ -29,12 +22,7 @@ $products = [
     $pallina,
     $luxuryImperialKennel
 ];
-
 ?>
-
-
-<!-- //template -->
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,95 +34,32 @@ $products = [
 </head>
 <body>
     <header>
-        <h1 class="text-center">Negozio di animali</h1>
+        <h1 class="text-center my-4">Negozio di animali</h1>
     </header>
     <main>
         <div class="container">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#all-tab" role="tab" aria-controls="all" aria-selected="true">Tutti i prodotti</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#food-tab" role="tab" aria-controls="food" aria-selected="false">Cibo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#game-tab" role="tab" aria-controls="game" aria-selected="false">Giochi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#kennel-tab" role="tab" aria-controls="kennel" aria-selected="false">Cucce</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="all-tab" role="tabpanel" aria-labelledby="all-tab">
-                    <div class="row">
-                        <?php foreach ($products as $product) { ?>
-                            <div class="col-md-4">
-                                <div class="card my-2">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?php echo $product->name; ?></h5>
-                                        <p class="card-text">Prezzo: <?php echo $product->price; ?> Euro</p>
-                                        <p class="card-text">Categoria: <?php echo $product->category->name; ?></p>
-                                    </div>
-                                </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <?php foreach ($products as $product) { ?>
+                    <?php $className = get_class($product); ?>
+                    <?php $productType = 'Prodotto generico'; ?>
+                    <?php if($className === 'Food') { $productType = 'Cibo'; } ?>
+                    <?php if($className === 'Game') { $productType = 'Gioco'; } ?>
+                    <?php if($className === 'Kennel') { $productType = 'Cuccia'; } ?>
+                    <div class="col">
+                        <div class="card h-100">
+                        <div class="card-text">Categoria: <?php echo $product->category->name; ?> <img src="<?php echo $product->category->image; ?>"></div>
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo $product->name; ?></h5>
+                                <?php if($product->description) { ?>
+                                    <p class="card-text"><?php echo $product->description; ?></p>
+                                <?php } ?>
+                                <p class="card-text">Prezzo: <?php echo $product->price; ?> Euro</p>
+                                <p class="card-text">Tipo di prodotto: <?php echo $productType ?></p>
+                                <p class="card-text">Categoria: <?php echo $product->category->name; ?></p>
                             </div>
-                        <?php } ?>
+                        </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="food-tab" role="tabpanel" aria-labelledby="food-tab">
-                    <div class="row">
-                        <?php foreach ($products as $product) { ?>
-                            <?php if(get_class($product) === 'Food') { ?>
-                                <div class="col-md-4">
-                                    <div class="card my-2">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><?php echo $product->name; ?></h5>
-                                            <p class="card-text">Prezzo: <?php echo $product->price; ?> Euro</p>
-                                            <p class="card-text">Categoria: <?php echo $product->category->name; ?></p>
-                                            <p class="card-text">Ingredienti: <?php echo implode(', ', $product->ingredients); ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } ?>
-                        <?php } ?>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="game-tab" role="tabpanel" aria-labelledby="game-tab">
-                    <div class="row">
-                        <?php foreach ($products as $product) { ?>
-                            <?php if(get_class($product) === 'Game') { ?>
-                                <div class="col-md-4">
-                                    <div class="card my-2">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><?php echo $product->name; ?></h5>
-                                            <p class="card-text">Prezzo: <?php echo $product->price; ?> Euro</p>
-                                            <p class="card-text">Categoria: <?php echo $product->category->name; ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } ?>
-                        <?php } ?>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="kennel-tab" role="tabpanel" aria-labelledby="kennel-tab">
-                    <div class="row">
-                        <?php foreach ($products as $product) { ?>
-                            <?php if(get_class($product) === 'Kennel') { ?>
-                                <div class="col-md-4">
-                                    <div class="card my-2">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><?php echo $product->name; ?></h5>
-                                            <p class="card-text">Prezzo: <?php echo $product->price; ?> Euro</p>
-                                            <p class="card-text">Categoria: <?php echo $product->category->name; ?></p>
-                                            <?php if(isset($product->size)) { ?>
-                                                <p class="card-text">Dimensione: <?php echo $product->size; ?></p>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } ?>
-                        <?php } ?>
-                    </div>
-                </div>
+                <?php } ?>
             </div>
         </div>
     </main>
