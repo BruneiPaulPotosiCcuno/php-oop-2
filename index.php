@@ -4,7 +4,6 @@ require_once __DIR__ . '/Models/Food.php';
 require_once __DIR__ . '/Models/Game.php';
 require_once __DIR__ . '/Models/Kennel.php';
 require_once __DIR__ . '/Models/Category.php';
-https://source.unsplash.com/random/200x300?dog
 
 $dogs = new Category('Cani', 'https://source.unsplash.com/random/200x300?dog');
 $cats = new Category('Gatti', 'https://placekitten.com/200/300');
@@ -13,6 +12,7 @@ $collare = new Product('Collare', 9.99, $dogs);
 $crocchette = new Food('Crocchette', 12.00, $dogs, ['carne', 'carote']);
 $crocchette->description = 'Le crocchette più buone del mondo';
 $pallina = new Game('Pallina', 4.99, $cats);
+$pallina->setColor('Rosso');
 $luxuryImperialKennel = new Kennel('Cuccia Luxury Imperial', 1100.00, $cats);
 $luxuryImperialKennel->size = 5;
 
